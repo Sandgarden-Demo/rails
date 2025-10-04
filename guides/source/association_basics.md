@@ -1962,7 +1962,7 @@ This eliminates the need to define attributes in a single table that are
 unintentionally shared among all subclasses.
 
 NOTE: The delegated types examples below are independent of the STI “Vehicle” example in the previous section.
-We'll start from scratch with `Entry` (the delegator) and two concrete types: `Message` and `Comment`.
+These examples start from scratch with an `Entry` model(the delegator) and two concrete types: `Message` and `Comment`.
 
 ### Generating Models
 
