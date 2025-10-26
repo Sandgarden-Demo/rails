@@ -1966,8 +1966,7 @@ These examples start from scratch with an `Entry` model(the delegator) and two c
 
 ### Generating Models
 
-To follow the delegated types example in this section, we’ll use an `Entry` model that delegates to
-`Message` and `Comment`. Generate these models as follows:
+Generate these models as follows:
 
 First, let's generate the base `Entry` model which will act as our superclass:
 
