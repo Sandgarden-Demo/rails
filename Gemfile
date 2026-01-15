@@ -6,9 +6,6 @@ gemspec
 gem "minitest", "~> 6.0"
 gem "minitest-mock"
 
-# We need a newish Rake since Active Job sets its test tasks' descriptions.
-gem "rake", ">= 13"
-
 gem "releaser", path: "tools/releaser"
 
 gem "sprockets-rails", ">= 2.0.0", require: false
@@ -99,7 +96,6 @@ gem "useragent", require: false
 group :job do
   gem "resque", require: false
   gem "resque-scheduler", require: false
-  gem "sidekiq", require: false
   gem "queue_classic", ">= 4.0.0", require: false, platforms: :ruby
   gem "sneakers", require: false
   gem "backburner", require: false
@@ -133,7 +129,6 @@ local_gemfile = File.expand_path(".Gemfile", __dir__)
 instance_eval File.read local_gemfile if File.exist? local_gemfile
 
 group :test do
-  gem "minitest-ci", require: false
   gem "minitest-retry"
 
   platforms :mri do

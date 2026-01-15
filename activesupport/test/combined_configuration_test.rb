@@ -140,4 +140,17 @@ class CombinedConfigurationTest < ActiveSupport::TestCase
   test "option with blank value in credentials without default returns nil" do
     assert_nil @combined.option(:blank_in_credentials)
   end
+
+  test "inspect does not show configuration values but shows keys as symbols" do
+    secret_env_value = "secret_env_value"
+    ENV["SECRET_ENV"] = secret_env_value
+    @envs.reload
+
+    assert_no_match(/#{secret_env_value}/, @combined.inspect)
+    assert_match(/keys=/, @combined.inspect)
+    assert_match(/:secret_env/, @combined.inspect)
+    assert_match(/\A#<ActiveSupport::CombinedConfiguration:0x[0-9a-f]+ keys=\[.*\]>\z/, @combined.inspect)
+  ensure
+    ENV.delete("SECRET_ENV")
+  end
 end
