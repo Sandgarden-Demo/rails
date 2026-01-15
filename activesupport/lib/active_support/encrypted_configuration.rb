@@ -102,7 +102,7 @@ module ActiveSupport
                             end
     end
 
-    # Reload the cached valuexs in case any of them changed or new ones were added during runtime.
+    # Reload the cached values in case any of them changed or new ones were added during runtime.
     def reload
       @config = @options = nil
     end
