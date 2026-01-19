@@ -1,0 +1,7 @@
+Include = [
+   "content/*.md",
+   "!README.md",
+   "!style-guide.md",
+   "!content/faq.md",
+   "!content/faq_draft.md"
+]
