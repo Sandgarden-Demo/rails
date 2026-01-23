@@ -10,7 +10,7 @@ This release includes updates across Rails 8.2.
 
 * Updated YAML loading across the framework to require Psych >= 4 and to use `YAML.unsafe_load` / `YAML.unsafe_load_file` when unsafe loading is required.
 * Improved `String#squish!` performance by avoiding replacements for single ASCII spaces while still normalizing other whitespace.
-* Fixed `ActiveSupport::EncryptedConfiguration#require` to raise `KeyError` with a descriptive "Missing key: ..." message for missing keys.
+* Fixed `ActiveSupport::EncryptedConfiguration#require` to raise `KeyError` with a descriptive `Missing key: ...` message for missing keys.
 * Improved `File.atomic_write` temporary-file creation by using an exclusive random filename and preserving existing file permissions.
 * Updated Active Support test assertions to strip leading lambda syntax (`->`) from callable source strings.
 
@@ -25,7 +25,7 @@ This release includes updates across Rails 8.2.
 * Fixed bulk `change_table` migration reversion to use the provided `table_name` and replay recorded operations in reverse order.
 * Fixed PostgreSQL schema dumping to avoid double-prefixing schema-qualified relation names.
 * Updated uniqueness validation query construction to use Arel case-sensitive and case-insensitive equality operators without requiring a database connection.
-* Updated Arel tree managers to derive the SQL engine from the associated table's klass for `delete`, `insert`, and `update` managers.
+* Updated Arel tree managers to derive the SQL engine from the associated table klass for `delete`, `insert`, and `update` managers.
 * Fixed batched association preloading for STI models by grouping batches by both `loader_query` and `klass`.
 
 ## Action View
