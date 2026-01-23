@@ -7,7 +7,7 @@ event_time: "2026-01-23T19:55:56Z"
 
 # Release notes v8.2.0.alpha
 
-This release covers changes merged through `2026-01-23T19:55:56Z`.
+This release includes changes merged through `2026-01-23T19:55:56Z`.
 
 ## Active Support
 
@@ -102,4 +102,3 @@ This release covers changes merged through `2026-01-23T19:55:56Z`.
 * Updated the migrations guide to qualify PostgreSQL extension names with their schema in examples.
 * Updated text note extraction to display notes consistently across CSS and JavaScript contexts.
 * Updated redirecting documentation terminology and escaped "Associations" in RDoc comments to avoid unintended autolinks.
-
