@@ -4,96 +4,92 @@ date: 2026-01-23
 version: "8.2.0.alpha"
 ---
 
-{
-  "Action Pack": [
-    "Applications can now merge parameter sets with custom conflict resolution while keeping strong-parameters semantics intact.",
-    "Applications will now get key-aware fallback behavior when fetching missing parameters.",
-    "Applications using file upload helpers will now generate standards-compliant HTML attribute values when multiple accepted types are configured.",
-    "Applications using Live streaming can now exclude specific execution-state keys from being shared into streaming threads."
-  ],
-  "Action View": [
-    "Developers using Rails tooling to find annotated notes in code will now get more accurate results across more file types.",
-    "Applications using streaming rendering will now report template errors more reliably and in a way that integrates with existing error tooling.",
-    "Rails’ internal parsing logic is now simpler and more consistent for templates and related tooling."
-  ],
-  "Active Job": [
-    "Applications relying on built-in queue adapters should plan to migrate to maintained alternatives before future removals.",
-    "Applications can now compute retry delays using both job context and the error that triggered the retry.",
-    "Applications can once again rely on `enqueue_after_transaction_commit` behaving as a real boolean configuration with sensible defaults."
-  ],
-  "Active Record": [
-    "Applications can now store enum values as floating-point numbers when the database column is a float.",
-    "Applications using PostgreSQL connections will now retain the expected search path behavior when reconnecting or resetting connections.",
-    "Applications that revert bulk table changes will now correctly undo the recorded operations against the intended table.",
-    "Applications will now avoid incorrect schema output when dumping PostgreSQL schemas that already include schema-qualified identifiers.",
-    "Applications performing uniqueness validations will now build comparison predicates more efficiently and with clearer intent.",
-    "Applications that generate SQL via Arel tree managers can now select the correct SQL engine based on the table being operated on."
-  ],
-  "Active Storage": [
-    "Applications can now choose whether uploads use MD5 or SHA256 checksums so they can align with their storage provider and security requirements.",
-    "Applications using Google Cloud Storage URL signing can now override the IAM client while keeping a secure default."
-  ],
-  "Active Support": [
-    "Applications will now see more consistent behavior when checking if an error has already been added.",
-    "Test assertions that display callable source will now produce cleaner and more consistent output."
-  ],
-  "Additional Changes": [
-    "Generated applications and CI templates now better match modern deployment and build expectations.",
-    "Rails’ test tooling and dependencies were updated to reflect current ecosystem expectations.",
-    "Developer-facing documentation and templates were clarified and corrected in multiple places."
-  ],
-  "Breaking Changes": [
-    "Applications must run on a newer Ruby version to build and run Rails going forward.",
-    "Applications should not rely on a legacy browser header being present in default responses going forward.",
-    "Applications that use custom YAML loading behavior must update to newer YAML tooling expectations."
-  ],
-  "Bug Fixes": [
-    "Applications using PostgreSQL now keep schema search path behavior consistent across connection lifecycle events.",
-    "Applications using Rails’ CSRF protection will now get more predictable callback ordering when opting into prepended protection.",
-    "Applications using file uploads will now see consistent HTML output for accepted MIME types when multiple values are provided.",
-    "Applications using association preloading with STI models will now get correct batching behavior in more cases.",
-    "Applications generating token attributes in migrations will no longer get duplicated uniqueness declarations.",
-    "Applications using encrypted configuration errors will now get clearer messages when required keys are missing.",
-    "Applications reverting bulk `change_table` migrations will now revert the correct table and in the correct order.",
-    "Applications using PostgreSQL schema dumping with schema-qualified names will now get correct output without duplicate schema prefixes.",
-    "Applications using generator and CI templates will now see fewer test failures caused by leaked environment settings.",
-    "Applications with console workflows will now reliably reset executor state when reloading code.",
-    "Applications using `File.atomic_write` will now get safer temporary-file creation and consistent permission handling."
-  ],
-  "Deprecations": [
-    "Applications relying on certain built-in Active Job adapters should plan to move to externally maintained adapters.",
-    "Applications using `skip_before_action :verify_authenticity_token` should plan to migrate away from skipping CSRF verification via that API."
-  ],
-  "Guides": [
-    "The documentation now explains how to run migrations using different execution strategies so teams can tailor migration behavior to their deployment workflows.",
-    "The documentation now includes clearer testing and configuration guidance for common setup issues."
-  ],
-  "New Features": [
-    "Applications can now choose how file checksums are calculated and validated when uploading and serving files.",
-    "Applications now have a shorter, clearer way to access the current Rails application object in code and examples.",
-    "Applications can now read configuration values from a local .env file in development without replacing existing ENV or credentials behavior.",
-    "Applications can now attach a deployment identifier that is consistently included in diagnostics and error reports.",
-    "Applications can now control which execution-state keys are not shared into streaming threads when using Live streaming.",
-    "Applications can now read Bearer tokens from incoming HTTP requests using a dedicated helper.",
-    "Controllers can now customize how parameter hashes are merged while preserving strong-parameters behavior.",
-    "Controllers can now provide more context when a fetched parameter is missing and a fallback block is used.",
-    "Applications can now generate more accurate uniqueness checks without needing to acquire a database connection during query construction.",
-    "Active Record can now represent enum values stored in float-backed columns.",
-    "Active Job retry behavior can now adapt its wait time based on the error that occurred.",
-    "Applications can now safely override how PostgreSQL custom type mappings are registered during adapter initialization."
-  ],
-  "Performance": [
-    "Applications doing heavy whitespace normalization will now spend less time rewriting strings that do not need changes."
-  ],
-  "Railties": [
-    "Applications can now reference the running app’s deployment revision in more places without custom wiring.",
-    "Generated application templates are now more predictable in CI and local development environments.",
-    "Rails’ internal parsing and developer tooling now rely on a single parsing implementation."
-  ],
-  "Security": [
-    "Applications using request forgery protection will now have clearer guidance and safer defaults around choosing a protection strategy.",
-    "Applications that disable forgery protection will no longer advertise cross-site request metadata in caching variations.",
-    "Applications using header-only CSRF protection in mixed HTTP/HTTPS environments will see fewer false rejections."
-  ]
-}
+This release includes updates across Rails 8.2.
+
+## Active Support
+
+* Updated YAML loading across the framework to require Psych >= 4 and to use `YAML.unsafe_load` / `YAML.unsafe_load_file` when unsafe loading is required.
+* Improved `String#squish!` performance by avoiding replacements for single ASCII spaces while still normalizing other whitespace.
+* Fixed `ActiveSupport::EncryptedConfiguration#require` to raise `KeyError` with a descriptive "Missing key: ..." message for missing keys.
+* Improved `File.atomic_write` temporary-file creation by using an exclusive random filename and preserving existing file permissions.
+* Updated Active Support test assertions to strip leading lambda syntax (`->`) from callable source strings.
+
+## Active Model
+
+* Fixed `ActiveModel::Errors#added?` to ignore `:callback` and `:message` options consistently when comparing stored errors and query options.
+
+## Active Record
+
+* Added support for `Float` enum values when the underlying column type is a float.
+* Fixed PostgreSQL reconnection and reset handling by reapplying `schema_search_path` and using libpq `parameter_status("search_path")` on PostgreSQL 18+ when available.
+* Fixed bulk `change_table` migration reversion to use the provided `table_name` and replay recorded operations in reverse order.
+* Fixed PostgreSQL schema dumping to avoid double-prefixing schema-qualified relation names.
+* Updated uniqueness validation query construction to use Arel case-sensitive and case-insensitive equality operators without requiring a database connection.
+* Updated Arel tree managers to derive the SQL engine from the associated table's klass for `delete`, `insert`, and `update` managers.
+* Fixed batched association preloading for STI models by grouping batches by both `loader_query` and `klass`.
+
+## Action View
+
+* Fixed `file_field` `accept:` option arrays to render as a comma-separated attribute value.
+* Fixed streaming rendering to report template errors to `ActiveSupport.error_reporter` when configured and to log otherwise.
+
+## Action Pack
+
+* Added block support to `ActionController::Parameters#merge` (forwarded to `Hash#merge`) while preserving permitted status.
+* Updated `ActionController::Parameters#fetch` to yield the missing key to the fallback block.
+* Added `config.action_controller.live_streaming_excluded_keys` to exclude execution-state keys from being shared into `ActionController::Live` streaming threads.
+* Added `ActionDispatch::Request#bearer_token` to parse `Authorization: Bearer ...` headers.
+* Fixed `protect_from_forgery prepend: true` to prepend both forgery protection callbacks in the correct order.
+* Deprecated calling `protect_from_forgery` without `:with` and set Rails 8.2 defaults to use `:exception` as the default strategy.
+* Updated forgery protection to skip adding `Sec-Fetch-Site` to the `Vary` header when forgery protection is skipped.
+* Fixed header-only CSRF protection to allow a missing `Sec-Fetch-Site` header on HTTP when SSL is not forced.
+* Removed the `X-XSS-Protection` header from Rails 8.2 default response headers.
+
+## Active Job
+
+* Deprecated the built-in Backburner, Sneakers, delayed_job, Resque, and queue_classic adapters for removal in Rails 9.0.
+* Updated `retry_on` to allow wait procs to accept the raised error as an optional second argument.
+* Restored `config.active_job.enqueue_after_transaction_commit` as a functional boolean and defaulted it to `true` for new applications.
+
+## Action Mailer
+
+* No changes.
+
+## Action Cable
+
+* No changes.
+
+## Active Storage
+
+* Added configurable checksum algorithms (MD5 or SHA256) for services and direct uploads, centralizing checksum computation and verification in `ActiveStorage::Service`.
+* Restored an overridable IAM client for Google Cloud Storage URL signing with a default based on Application Default Credentials.
+
+## Action Mailbox
+
+* No changes.
+
+## Action Text
+
+* No changes.
+
+## Railties
+
+* Updated the minimum supported Ruby version to 3.3.
+* Added `Rails.app` as an alias for `Rails.application`.
+* Added `Rails.app.creds` to provide combined access to configuration values from `ENV` and encrypted credentials and, in development, `.env`.
+* Added `Rails.app.dotenvs` to provide `.env` lookup with variable and command interpolation.
+* Added `Rails.app.revision` / `config.revision` to expose a deployment revision in `Rails::Info` and error reporting context.
+* Updated `rails notes` to recognize CSS block comments and to trim whitespace around printed notes.
+* Updated tooling parsing to use Prism and removed Ripper-based parsing fallbacks for `render`, `notes`, and test parsing paths.
+* Updated generated CI templates to install `libvips` when Active Storage is enabled.
+* Updated generated CI templates to make system tests opt-in by default.
+* Updated generated templates and devcontainer defaults to standardize Ruby version selection (including Ruby 4.0.0 availability).
+* Fixed token attribute generation to avoid emitting duplicate `unique: true` declarations.
+* Updated test tooling to improve isolation by scoping environment variables (such as `DATABASE_URL`, `RAILS_ENV`, and `RACK_ENV`) to individual tasks.
+* Updated console `reload!` to reset the application executor when active.
+
+## Guides
+
+* Updated the Active Record Migrations guide to document migration execution strategies and configurable migration backends.
+* Updated guides to clarify rate limit testing cache store configuration and to document running tests from the repository root with top-level `bin/test`.
 
