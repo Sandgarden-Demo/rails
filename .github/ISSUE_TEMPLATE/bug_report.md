@@ -1,6 +1,10 @@
 ---
 name: Bug report
 about: Report an issue with Rails you've discovered
+title: ''
+labels: ''
+assignees: ''
+
 ---
 
 ### Steps to reproduce
@@ -25,4 +29,4 @@ here](https://edgeguides.rubyonrails.org/contributing_to_ruby_on_rails.html#crea
 
 **Rails version**: 
 
-**Ruby version**: 
+**Ruby version**:
